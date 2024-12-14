@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/shaban/vague"
@@ -10,42 +11,42 @@ func TestParseIf(t *testing.T) {
 	tests := []testData{
 		{
 			name: "invalid: if no expression",
-			input: `
-			<div v-if>
-				<h1>Heading</h1>
-			</div>`,
+			input: fmt.Sprintf(`
+				<div %s>
+					<h1>Heading</h1>
+				</div>`, vague.IF_TOKEN),
 			expectErr:       true,
 			expectNilNode:   true,
 			expectedErrCode: vague.ErrIfNoExpr,
 		},
 		{
 			name: "invalid: multiple if statements",
-			input: `
-			<div>
-				<h1 v-if="Show" v-if="Valid">Heading</h1>
-			</div>`,
+			input: fmt.Sprintf(`
+				<div>
+					<h1 %[1]s="Show" %[1]s="Valid">Heading</h1>
+				</div>`, vague.IF_TOKEN),
 			expectErr:       true,
 			expectNilNode:   true,
 			expectedErrCode: vague.ErrMultiIf,
 		},
 		{
 			name: "invalid: composite else-if",
-			input: `
-			<div v-if="isValid(x,y int)">
-				<h1 v-if="Show && Valid">Heading</h1>
-				<h2 v-else v-if="Tabular">Heading</h2>
-				<h2 v-else>Heading</h2>
-			</div>`,
+			input: fmt.Sprintf(`
+				<div %[1]s="isValid(x,y int)">
+					<h1 %[1]s="Show && Valid">Heading</h1>
+					<h2 %[2]s %[1]s="Tabular">Heading</h2>
+					<h2 %[2]s>Heading</h2>
+				</div>`, vague.IF_TOKEN, vague.ELSE_TOKEN),
 			expectErr:       true,
 			expectNilNode:   true,
 			expectedErrCode: vague.ErrCompositeElseIf,
 		},
 		{
 			name: "valid: mix of correct if statements",
-			input: `
-			<div v-if="isValid(x,y int)">
-				<h1 v-if="Show && Valid">Heading</h1>
-			</div>`,
+			input: fmt.Sprintf(`
+				<div %[1]s="isValid(x,y int)">
+					<h1 %[1]s="Show && Valid">Heading</h1>
+				</div>`, vague.IF_TOKEN),
 			expectErr:     false,
 			expectNilNode: false,
 			expectedNode: Tag(vague.ELEMENT, "div").If("isValid(x,y int)").Child(
@@ -56,5 +57,4 @@ func TestParseIf(t *testing.T) {
 	for _, TestRow = range tests {
 		t.Run(TestRow.name, testFunc)
 	}
-
 }
