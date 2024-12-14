@@ -34,4 +34,4 @@ func (s Symbol) ParameterTypeAt(index int) reflect.Type {
 	return s.Params[index]
 }
 
-type SymbolTable map[string]Symbol
+type symbolTable map[string]Symbol
