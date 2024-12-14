@@ -2,7 +2,8 @@ package tests
 
 import (
 	"testing"
-	"weld/vague"
+
+	"github.com/shaban/vague"
 )
 
 /*

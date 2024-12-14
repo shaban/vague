@@ -6,7 +6,8 @@ import (
 	"reflect"
 	"strings"
 	"testing"
-	"weld/vague"
+
+	"github.com/shaban/vague"
 
 	"github.com/sergi/go-diff/diffmatchpatch"
 )
